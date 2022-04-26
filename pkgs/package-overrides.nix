@@ -9,6 +9,8 @@ prev:
 let
   patchName = patch: patch.name or (builtins.baseNameOf patch);
   inherit (pkgs) lib;
+
+  isBuiltFromGit = lib.hasInfix "+date=" prev.php.version;
 in
 
 {
@@ -409,6 +411,15 @@ in
         in
         ourPatches ++ upstreamPatches;
     });
+
+    tokenizer =
+      prev.extensions.tokenizer.overrideAttrs (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ lib.optionals isBuiltFromGit [
+          # Tarballs ship pre-generated parser files.
+          pkgs.bison
+          pkgs.flex
+        ];
+      });
 
     wddx =
       if lib.versionOlder prev.php.version "7.4" then
