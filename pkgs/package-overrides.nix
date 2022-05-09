@@ -322,7 +322,9 @@ in
         ourPatches ++ upstreamPatches;
 
       nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        # Tarballs ship pre-generated parser files.
         pkgs.bison
+        pkgs.flex
       ];
 
       postPatch = ''
@@ -428,11 +430,20 @@ in
 
     tokenizer =
       prev.extensions.tokenizer.overrideAttrs (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ lib.optionals isBuiltFromGit [
+        nativeBuildInputs = attrs.nativeBuildInputs ++ [
           # Tarballs ship pre-generated parser files.
           pkgs.bison
           pkgs.flex
         ];
+        postPatch = ''
+          echo '
+            # TODO: Add explanation here.
+            # See https://github.com/fossar/nix-phps/pull/104#issuecomment-1113964195
+            PHP_PROG_BISON([3.0.0])
+            PHP_PROG_RE2C([0.13.4])
+          ' | cat - ext/tokenizer/config.m4 > ext/tokenizer/config.m4.tmp
+          mv ext/tokenizer/config.m4{.tmp,}
+        '';
       });
 
     wddx =
