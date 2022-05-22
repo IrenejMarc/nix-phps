@@ -37,7 +37,7 @@ let
             ++ prev.lib.optionals (prev.lib.versions.majorMinor args.version == "5.6") [
               (prev.pkgs.fetchpatch {
                 url = "https://github.com/php/php-src/commit/8c8679207ae5ada8751288e75b78c928a4d34d1d.patch";
-                sha256 = "a3c70f5371397885af3ea0772e873c9630eaadb30f49f4a175212a6bef0123b0";
+                sha256 = "1pgvywdn68fslxscwsiv0f70zqq4w6wyb2qy3ck8z4aklwfz2lyh";
               })
             ];
 
