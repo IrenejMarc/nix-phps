@@ -33,6 +33,12 @@ let
                 url = "https://bugs.php.net/patch-display.php?bug_id=76826&patch=bug76826.poc.0.patch&revision=1538723399&download=1";
                 sha256 = "aW+MW9Kb8N/yBO7MdqZMZzgMSF7b+IMLulJKgKPWrUA=";
               })
+            ]
+            ++ prev.lib.optionals (prev.lib.versions.majorMinor args.version == "5.6") [
+              (prev.pkgs.fetchpatch {
+                url = "https://github.com/php/php-src/commit/8c8679207ae5ada8751288e75b78c928a4d34d1d.patch";
+                sha256 = "a3c70f5371397885af3ea0772e873c9630eaadb30f49f4a175212a6bef0123b0";
+              })
             ];
 
           configureFlags =
